@@ -20,6 +20,9 @@
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				<form role="form" action="/board/modify" method="post">
+					<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum }"/>' >
+					<input type='hidden' name='amount' value='<c:out value="${cri.amount }"/>' >
+					
 					<div class="form-group">
 					<label>Bno</label>
 					<input class="form-control" name='bno' value='<c:out value="${board.bno }"/>' readonly="readonly">
@@ -73,8 +76,11 @@ $(document).ready(function(){
 			//move to list
 			//self.location ="/board/list";
 			formObj.attr("action","/board/list").attr("method","get");
-			formObj.empty();
-			return;
+			var pageNumTag =$("input[name='pageNum']").clone(); //다른 내용 삭제하고 이 두개만 담음
+			var amountTag =$("input[name='amount']").clone();
+			formObj.empty(); //안에 내용 싹 비우기
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 		}
 		formObj.submit();
 		});

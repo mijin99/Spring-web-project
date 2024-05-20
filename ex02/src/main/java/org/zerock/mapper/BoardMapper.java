@@ -28,4 +28,8 @@ public interface BoardMapper {
 	
 	//update , 몇 건이 업데이트 되었는지 받을 수 잇음
 	public int update(BoardVO board);
+	
+	//전체 데이터 수
+	public int getTotalCount(Criteria cri);
+	
 }
