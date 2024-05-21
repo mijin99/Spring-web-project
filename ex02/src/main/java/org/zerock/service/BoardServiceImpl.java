@@ -55,7 +55,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int getTotal(Criteria cri) {
 		log.info("get total count");
-		return mapper.getTotalCount(cri);
+		return mapper.getTotalCount(cri); //criteria input 굳이 필요없지만 나중에 검색에서 쓰임
 	}
 	
 	

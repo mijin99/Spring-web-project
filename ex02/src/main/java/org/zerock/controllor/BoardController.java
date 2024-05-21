@@ -71,10 +71,13 @@ public class BoardController {
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result","success");
 		}
+		/* UriComponentsBuilder 사용예시, 주로 javascript 못 쓸 때사용 가능
 		rttr.addAttribute("pageNum",cri.getPageNum());
 		rttr.addAttribute("amount",cri.getAmount());
+		rttr.addAttribute("type",cri.getType());
+		rttr.addAttribute("keyword",cri.getKeyword()); */
 		
-		return "redirect:/board/list";
+		return "redirect:/board/list" + cri.getListLink();
 	}
 	
 	@PostMapping("/remove")
@@ -83,8 +86,11 @@ public class BoardController {
 		if(service.remove(bno)) {
 			rttr.addFlashAttribute("result","success");
 		}
+		/*
 		rttr.addAttribute("pageNum",cri.getPageNum());
 		rttr.addAttribute("amount",cri.getAmount());
-		return "redirect:/board/list";
+		rttr.addAttribute("type",cri.getType());
+		rttr.addAttribute("keyword",cri.getKeyword());*/
+		return "redirect:/board/list" + cri.getListLink();
 	}
 }

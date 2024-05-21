@@ -8,6 +8,27 @@
 			select * from tb1_board where bno >0 ]]>
 	</select>
 	
+	<!-- 동적 mybatis  -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>				
+		</trim>
+	</sql>
+	
 	<!-- getlist paging  [CDATA] 는 부등호 처리를 위함-->
 	<select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
 		<![CDATA[
@@ -16,10 +37,16 @@
 				select /*+ INDEX_DESC(tb1_board pk_board) */ 
 					rownum rn, bno,title,content,writer,regdate,updatedate
 				from tb1_board
-				where rownum <= #{pageNum} * #{amount} )
+				where 
+				]]>
+				<include refid="criteria"></include>
+				
+			<![CDATA[
+				rownum <= #{pageNum} * #{amount} )
 			where rn > (#{pageNum}-1) * #{amount}	
 		]]>
 	</select>
+	
 	
 	<!-- #{변수}는  ? 와 같이 파라미터 처리, 바인딩됨 -->
 	<insert id="insert">
@@ -55,5 +82,10 @@
 		updateDate =sysdate
 		where bno = #{bno}
 	</update>
+	
+	<!-- getTotalCount -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tb1_board where  <include refid="criteria"></include> bno > 0
+	</select>
 </mapper>
 	
