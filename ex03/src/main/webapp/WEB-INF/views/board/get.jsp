@@ -52,6 +52,34 @@
 </div>
 <!-- end row -->
 
+<!-- jsp 파일 모듈화 -> 댓글처리 -->
+<script  type="text/javascript" src="/resources/js/reply.js"></script>
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		//reply.js에 즉시실행함수 실행 확인 
+		console.log(replyService);
+	});
+</script>
+<script>
+console.log("==========");
+console.log("JS TEST");
+var bnoValue='<c:out value="${board.bno}"/>';
+
+replyService.getList({bno:bnoValue,page:1},function(list){
+	for(var i=0, len=list.length||0;i<len;i++){
+		console.log(list[i]);
+	}
+});
+//for replyService add test
+replyService.add(
+		{reply:"JS Test",replyer:"tester",bno:bnoValue}
+		,
+		function(result){
+			alert("RESULT:"+ result);
+		}
+);
+</script>
+
 <!-- operForm javascript작성 -->
 <script type="text/javascript">
 $(document).ready(function(){

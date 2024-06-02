@@ -25,6 +25,6 @@
 		select rno,bno,reply,replyer,replyDate,updatedate
 		from tb1_reply
 		where bno =#{bno}
-		oreder by rno asc	
+		order by rno asc	
 	</select>
 </mapper>
