@@ -16,9 +16,13 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">Board Read Page</div>
+			<div class="panel-heading">
+				heading
+			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
+				
+			
 				<div class="form-group">
 				<label>Bno</label><input class="form-control" name='bno' value='<c:out value="${board.bno }"/>' readonly="readonly">
 				</div>
@@ -52,8 +56,38 @@
 </div>
 <!-- end row -->
 
+<div class='row'>
+	<div class="col-lg-12">
+		<!--./ panel -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-comments fa-fw"></i> Reply
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<ul class="chat">
+					<!-- start reply -->
+					<li class="left clearfix" data-rno='12'>
+						<div>
+							<div class="header">
+								<strong class="primary-font">user00</strong> 
+								<small class="pull-right text-muted">2018-01-01 13:13</small>
+							</div>
+							<p>Good job!</p>
+						</div>
+					</li>
+					<!-- end reply -->
+				</ul>
+				<!-- end ul -->
+			</div>
+		<!-- ./panel .char-panel -->
+		</div>
+	</div>
+	<!-- ./end row -->
+</div>
+
 <!-- jsp 파일 모듈화 -> 댓글처리 -->
-<script  type="text/javascript" src="/resources/js/reply.js"></script>
+<script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript"> 
 	$(document).ready(function(){
 		//reply.js에 즉시실행함수 실행 확인 
@@ -61,23 +95,77 @@
 	});
 </script>
 <script>
+$(document).ready(function(){
+	var bnoValue='<c:out value="${board.bno}"/>';
+	var replyUL =$(".chat");
+	showList(1);
+	function showList(page){
+		replyService.getList({bno:bnoValue,page:page||1},function(list){
+			var str="";
+		if(list==null ||list.length==0){
+			replyUL.html("");
+			return;
+		}
+		for(var i=0, len=list.length||0; i<len; i++){
+			str+="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
+			str+="<div><div class='header'><strong class='primary-font'>"+list[i].replyer+"</strong>";
+			str+="<small class='pull-right text-muted'>"+list[i].replyDate+"</small></div>";
+			str+=" <p>"+list[i].reply+"</p></div></li>";
+		}
+		replyUL.html(str);
+		}); //end of function
+	} //end of show list
+}); 
+
+</script>
+<script>
 console.log("==========");
 console.log("JS TEST");
 var bnoValue='<c:out value="${board.bno}"/>';
 
-replyService.getList({bno:bnoValue,page:1},function(list){
-	for(var i=0, len=list.length||0;i<len;i++){
-		console.log(list[i]);
-	}
-});
+
 //for replyService add test
-replyService.add(
+/* replyService.add(
 		{reply:"JS Test",replyer:"tester",bno:bnoValue}
 		,
 		function(result){
 			alert("RESULT:"+ result);
 		}
-);
+); */
+
+//reply List Test
+replyService.getList({bno:bnoValue,page:1},function(list){
+	for(var i=0, len=list.length||0;i<len;i++){
+		console.log(list[i]);
+	}
+});
+
+
+//댓글 삭제 테스트
+replyService.remove(24, function(count){
+	console.log(count);
+	if(count==="success"){
+		alert("REMOVED");
+		}
+	},function(err){
+	alert('ERROR........');
+});
+	
+//update
+replyService.update({
+	rno : 22,
+	bno : bnoValue,
+	reply : "Modified Reply......."
+	},function(result){
+		alert("수정 완료....");
+	});
+	
+//get
+replyService.get(10,function(data){
+	console.log(data);
+});
+
+	
 </script>
 
 <!-- operForm javascript작성 -->
@@ -95,4 +183,4 @@ $(document).ready(function(){
 });
 </script>
 
-<%@include file="../includes/footer.jsp"%>
+			<%@include file="../includes/footer.jsp"%>
