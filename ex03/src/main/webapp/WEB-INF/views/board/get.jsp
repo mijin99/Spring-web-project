@@ -62,6 +62,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i> Reply
+				<!-- 추가버튼 -->
+				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+			</div>
+			
 			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -84,7 +88,43 @@
 		</div>
 	</div>
 	<!-- ./end row -->
+
+
+<!-- 댓글 추가 모달창 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden ="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Reply</label>
+					<input class="form-control" name='reply' value='New Reply!!!!!!!'>
+				</div>
+				<div class="form-group">
+					<label>Replyer</label>
+					<input class="form-control" name='replyer' value='replyer'>
+				</div>
+				<div class="form-group">
+					<label>Reply Date</label>
+					<input class="form-control" name='replyDate' value=''>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+				<button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+				<button id='modalCloseBtn' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button id='modalClassBtn' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		<!-- modal content -->
+	</div>
+	<!-- modal dialog -->
 </div>
+<!-- modal -->
+
 
 <!-- jsp 파일 모듈화 -> 댓글처리 -->
 <script type="text/javascript" src="/resources/js/reply.js"></script>
@@ -109,12 +149,33 @@ $(document).ready(function(){
 		for(var i=0, len=list.length||0; i<len; i++){
 			str+="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 			str+="<div><div class='header'><strong class='primary-font'>"+list[i].replyer+"</strong>";
-			str+="<small class='pull-right text-muted'>"+list[i].replyDate+"</small></div>";
+			str+="<small class='pull-right text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
 			str+=" <p>"+list[i].reply+"</p></div></li>";
 		}
 		replyUL.html(str);
 		}); //end of function
 	} //end of show list
+	
+	//<!-- 모달 댓글창처리  -->
+	var modal =$(".modal");
+	var modalInputReply = modal.find("input[name='reply']");
+	var modalInputReplyer = modal.find("input[name='replyer']");
+	var modalInputReplyDate = modal.find("input[name='replyDate']");
+	
+	var modalModBtn = $("#modalModBtn");
+	var modalRemoveBtn = $("#modalRemoveBtn");
+	var modalRegisterBtn = $("#modalRegisterBtn");
+	
+	$("#addReplyBtn").on("click",function(e){
+		modal.find("input").val("");
+		modalInputReplyDate.closest("div").hide();
+		modal.find("button[id!='modalCloseBtn']").hide();
+		modalRegisterBtn.show();
+		$(".modal").modal("show");
+	});
+	
+	
+	
 }); 
 
 </script>
@@ -131,7 +192,7 @@ var bnoValue='<c:out value="${board.bno}"/>';
 		function(result){
 			alert("RESULT:"+ result);
 		}
-); */
+);  */
 
 //reply List Test
 replyService.getList({bno:bnoValue,page:1},function(list){
@@ -142,24 +203,24 @@ replyService.getList({bno:bnoValue,page:1},function(list){
 
 
 //댓글 삭제 테스트
-replyService.remove(24, function(count){
+/* replyService.remove(24, function(count){
 	console.log(count);
 	if(count==="success"){
 		alert("REMOVED");
 		}
 	},function(err){
 	alert('ERROR........');
-});
+}); */
 	
 //update
-replyService.update({
+/* replyService.update({
 	rno : 22,
 	bno : bnoValue,
 	reply : "Modified Reply......."
 	},function(result){
 		alert("수정 완료....");
 	});
-	
+	 */
 //get
 replyService.get(10,function(data){
 	console.log(data);
