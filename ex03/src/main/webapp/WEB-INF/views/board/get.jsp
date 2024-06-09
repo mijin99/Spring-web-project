@@ -60,18 +60,17 @@
 	<div class="col-lg-12">
 		<!--./ panel -->
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<i class="fa fa-comments fa-fw"></i> Reply
-				<!-- 추가버튼 -->
-				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
-			</div>
+			 <div class="panel-heading">
+        		<i class="fa fa-comments fa-fw"></i> Reply
+        		<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+      		</div>    
 			
 			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				<ul class="chat">
 					<!-- start reply -->
-					<li class="left clearfix" data-rno='12'>
+				<!-- <li class="left clearfix" data-rno='12'>
 						<div>
 							<div class="header">
 								<strong class="primary-font">user00</strong> 
@@ -79,51 +78,54 @@
 							</div>
 							<p>Good job!</p>
 						</div>
-					</li>
+					</li> -->	
 					<!-- end reply -->
 				</ul>
 				<!-- end ul -->
 			</div>
 		<!-- ./panel .char-panel -->
-		</div>
 	</div>
+</div>
 	<!-- ./end row -->
 
-
 <!-- 댓글 추가 모달창 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden ="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
-			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label>Reply</label>
-					<input class="form-control" name='reply' value='New Reply!!!!!!!'>
-				</div>
-				<div class="form-group">
-					<label>Replyer</label>
-					<input class="form-control" name='replyer' value='replyer'>
-				</div>
-				<div class="form-group">
-					<label>Reply Date</label>
-					<input class="form-control" name='replyDate' value=''>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
-				<button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
-				<button id='modalCloseBtn' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button id='modalClassBtn' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-		<!-- modal content -->
-	</div>
-	<!-- modal dialog -->
-</div>
-<!-- modal -->
+
+<!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Reply</label> 
+                <input class="form-control" name='reply' value='New Reply!!!!'>
+              </div>      
+              <div class="form-group">
+                <label>Replyer</label> 
+                <input class="form-control" name='replyer' value='replyer'>
+              </div>
+              <div class="form-group">
+                <label>Reply Date</label> 
+                <input class="form-control" name='replyDate' value='2018-01-01 13:13'>
+              </div>
+      
+            </div>
+<div class="modal-footer">
+        <button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+        <button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+        <button id='modalRegisterBtn' type="button" class="btn btn-primary">Register</button>
+        <button id='modalCloseBtn' type="button" class="btn btn-default">Close</button>
+      </div>          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
 
 
 <!-- jsp 파일 모듈화 -> 댓글처리 -->
@@ -174,6 +176,67 @@ $(document).ready(function(){
 		$(".modal").modal("show");
 	});
 	
+	modalRegisterBtn.on("click",function(e){
+		var reply ={
+				reply : modalInputReply.val(),
+				replyer : modalInputReplyer.val(),
+				bno : bnoValue
+		};
+		replyService.add(reply,function(result){
+			alert(result);
+			modal.find("input").val("");
+			modal.modal("hide");
+			
+			showList(1); //화면 리프레시
+		});
+	}); //class chat, 이벤트는 ul 태그chat클래스에 걸었지만 li (각 댓글)에 위임.하여 this =각 댓글
+	$(".chat").on("click","li",function(e){
+		var rno = $(this).data("rno");
+		console.log(rno);
+		replyService.get(rno,function(reply){
+			modalInputReply.val(reply.reply);
+			modalInputReplyer.val(reply.replyer);
+			modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly","readonly");
+			modal.data("rno",reply.rno);
+			
+			modal.find("button[id !='modalCloseBtn']").hide();
+			modalModBtn.show();
+			modalRemoveBtn.show();
+			
+			$(".modal").modal("show");
+		});
+	});
+	
+	//수정
+
+    modalModBtn.on("click", function(e){
+    	  
+   	  var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+   	  
+   	  replyService.update(reply, function(result){
+   	        
+   	    alert(result);
+   	    modal.modal("hide");
+   	    showList(pageNum);
+   	    
+   	  });
+   	  
+   	});
+	
+	//삭제
+    modalRemoveBtn.on("click", function (e){
+     	  
+     	  var rno = modal.data("rno");
+     	  
+     	  replyService.remove(rno, function(result){
+     	        
+     	      alert(result);
+     	      modal.modal("hide");
+     	      showList(pageNum);
+     	      
+     	  });
+     	  
+     	});
 	
 	
 }); 
