@@ -84,6 +84,7 @@
 				<!-- end ul -->
 			</div>
 		<!-- ./panel .char-panel -->
+		<div class="panel-footer"></div>
 	</div>
 </div>
 	<!-- ./end row -->
@@ -159,68 +160,69 @@ $(document).ready(function(){
 	} //end of show list
 	
 	//<!-- 모달 댓글창처리  -->
-	var modal =$(".modal");
-	var modalInputReply = modal.find("input[name='reply']");
-	var modalInputReplyer = modal.find("input[name='replyer']");
-	var modalInputReplyDate = modal.find("input[name='replyDate']");
-	
-	var modalModBtn = $("#modalModBtn");
-	var modalRemoveBtn = $("#modalRemoveBtn");
-	var modalRegisterBtn = $("#modalRegisterBtn");
-	
-	$("#addReplyBtn").on("click",function(e){
-		modal.find("input").val("");
-		modalInputReplyDate.closest("div").hide();
-		modal.find("button[id!='modalCloseBtn']").hide();
-		modalRegisterBtn.show();
-		$(".modal").modal("show");
-	});
-	
-	modalRegisterBtn.on("click",function(e){
-		var reply ={
-				reply : modalInputReply.val(),
-				replyer : modalInputReplyer.val(),
-				bno : bnoValue
-		};
-		replyService.add(reply,function(result){
-			alert(result);
-			modal.find("input").val("");
-			modal.modal("hide");
-			
-			showList(1); //화면 리프레시
-		});
-	}); //class chat, 이벤트는 ul 태그chat클래스에 걸었지만 li (각 댓글)에 위임.하여 this =각 댓글
-	$(".chat").on("click","li",function(e){
-		var rno = $(this).data("rno");
-		console.log(rno);
-		replyService.get(rno,function(reply){
-			modalInputReply.val(reply.reply);
-			modalInputReplyer.val(reply.replyer);
-			modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly","readonly");
-			modal.data("rno",reply.rno);
-			
-			modal.find("button[id !='modalCloseBtn']").hide();
-			modalModBtn.show();
-			modalRemoveBtn.show();
-			
-			$(".modal").modal("show");
-		});
-	});
+    var modal = $(".modal");
+    var modalInputReply = modal.find("input[name='reply']");
+    var modalInputReplyer = modal.find("input[name='replyer']");
+    var modalInputReplyDate = modal.find("input[name='replyDate']");
+    
+    var modalModBtn = $("#modalModBtn");
+    var modalRemoveBtn = $("#modalRemoveBtn");
+    var modalRegisterBtn = $("#modalRegisterBtn");
+    
+    $("#modalCloseBtn").on("click", function(e){
+    	modal.modal('hide');
+    });
+    
+    $("#addReplyBtn").on("click", function(e){
+      modal.find("input").val("");
+      modalInputReplyDate.closest("div").hide();
+      modal.find("button[id !='modalCloseBtn']").hide();
+      modalRegisterBtn.show();
+      $(".modal").modal("show");
+      
+    });
+    
+
+    modalRegisterBtn.on("click",function(e){
+      var reply = {
+            reply: modalInputReply.val(),
+            replyer:modalInputReplyer.val(),
+            bno:bnoValue
+          };
+      replyService.add(reply, function(result){
+        alert(result);
+        modal.find("input").val("");
+        modal.modal("hide");
+        showList(1);
+        //showList(-1);   
+      });
+    });
+    
+ //class chat, 이벤트는 ul 태그chat클래스에 걸었지만 li (각 댓글)에 위임.하여 this =각 댓글
+	 $(".chat").on("click", "li", function(e){
+      var rno = $(this).data("rno");
+      replyService.get(rno, function(reply){
+    	console.log(reply);
+        modalInputReply.val(reply.reply);
+        modalInputReplyer.val(reply.replyer);
+        modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
+        modal.data("rno", reply.rno); 
+        modal.find("button[id !='modalCloseBtn']").hide();
+        modalModBtn.show();
+        modalRemoveBtn.show();
+        
+        $(".modal").modal("show");    
+      });
+    });
 	
 	//수정
-
-    modalModBtn.on("click", function(e){
-    	  
-   	  var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
-   	  
-   	  replyService.update(reply, function(result){
-   	        
+    modalModBtn.on("click", function(e){	  
+   	  var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};	  
+   	  replyService.update(reply, function(result){    
    	    alert(result);
    	    modal.modal("hide");
-   	    showList(pageNum);
-   	    
-   	  });
-   	  
+   	    showList(1);   
+   	  });  
    	});
 	
 	//삭제
@@ -232,10 +234,8 @@ $(document).ready(function(){
      	        
      	      alert(result);
      	      modal.modal("hide");
-     	      showList(pageNum);
-     	      
-     	  });
-     	  
+     	      showList(1);
+     	  });  
      	});
 	
 	
