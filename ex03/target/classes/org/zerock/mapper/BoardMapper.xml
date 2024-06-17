@@ -32,10 +32,10 @@
 	<!-- getlist paging  [CDATA] 는 부등호 처리를 위함-->
 	<select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
 		<![CDATA[
-			select bno,title,content,writer,regdate,updatedate
+			select bno,title,content,writer,regdate,updatedate,replyCnt
 			from (
 				select /*+ INDEX_DESC(tb1_board pk_board) */ 
-					rownum rn, bno,title,content,writer,regdate,updatedate
+					rownum rn, bno,title,content,writer,regdate,updatedate,replyCnt
 				from tb1_board
 				where 
 				]]>
@@ -87,5 +87,11 @@
 	<select id="getTotalCount" resultType="int">
 		select count(*) from tb1_board where  <include refid="criteria"></include> bno > 0
 	</select>
+	
+	
+	<update id="updateReplyCnt">
+		update tb1_board set replyCnt =replyCnt+ #{amount} where bno= #{bno}
+	</update>
+	
 </mapper>
 	
