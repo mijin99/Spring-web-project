@@ -30,6 +30,21 @@ $(document).ready(function(){
 		var inputFile =$("input[name='uploadFile']");
 		var files =inputFile[0].files;
 		console.log(files);
+		
+		//jquery를 이용한 펌부파일 전송, form data타입 객체에 각 파일 데이터를 추가
+		for (var i=0;i<files.length;i++){
+			formData.append("uploadFile",files[i]);
+		}
+		$.ajax({
+			url : '/uploadAjaxAction',
+		processData:false, //비동기
+		contentType :false,
+		data : formData,
+		type :'POST',
+		success: function(result){
+			alert("Uploaded");
+		}	
+		}); //$.ajax
 	});
 });
 </script>
