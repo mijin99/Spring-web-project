@@ -11,6 +11,33 @@
 <div class='uploadDiv'>
 	<input type='file' name='uploadFile' multiple>
 </div>
+
+<!-- 첨부파일 모양  -->
+<style>
+	.uploadResult{
+		width:100%;
+		background-color:gray;
+	}
+	.uploadResult ul{
+		display:flex;
+		flex-flex :row;
+		justify-content :center;
+		align-items:center;
+	}
+	.uploadResult ul li {
+		list-style :none;
+		padding :10px;
+	}
+	.uploadResult ul li img {
+		width :20px;
+	}
+</style>
+<!-- 업로드 결과 표시구역 -->
+<div class='uploadResult'>
+	<ul>
+	</ul>
+</div>
+
 <button id='uploadBtn'>Upload</button>
 
 <!-- <script 
@@ -22,6 +49,8 @@ crossorign="anonymous">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
 crossorigin="anonymous"></script>
+
+
 
 <script>
 $(document).ready(function(){
@@ -40,6 +69,9 @@ $(document).ready(function(){
 		}
 		return true;
 	}
+	//업로드 후 초기화를 위한 기존 데이터 복제
+	var cloneObj = $(".uploadDiv").clone();
+	
 	$("#uploadBtn").on("click",function(e){
 
 		var formData = new FormData();
@@ -61,11 +93,30 @@ $(document).ready(function(){
 			data : formData,
 			type :'POST',
 			dataType:'json',
-			success: function(result){
+			success: function(result){//>???
 				console.log(result);
+				showUploadedFile(result);
+				
+				//업로드 후 복사 객체로 대체시키기
+				$(".uploadDiv").html(cloneObj.html());
 			}	
 		}); //$.ajax
 	});
+	//파일 업로드 목록 ul에 표시
+	var uploadResult = $(".uploadResult ul");
+	function showUploadedFile(uploadResultArr){
+		var str="";
+		$(uploadResultArr).each(function(i,obj){
+			if(!obj.image){
+				str+= "<li><img src='/resources/img/folder.png'>" 
+					+ obj.fileName +"</li>";
+			}else{
+				str+="<li>" +obj.fileName + "</li>";
+			}
+		});
+		uploadResult.append(str);
+	}
+	
 });
 </script>
 
