@@ -108,10 +108,13 @@ $(document).ready(function(){
 		var str="";
 		$(uploadResultArr).each(function(i,obj){
 			if(!obj.image){
-				str+= "<li><img src='/resources/img/folder.png'>" 
+				str+= "<li><img src='/resources/img/folder.png'>"
 					+ obj.fileName +"</li>";
+
 			}else{
-				str+="<li>" +obj.fileName + "</li>";
+				//str+="<li>" +obj.fileName + "</li>";
+				var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj_uuid+"_"+obj.fileName);
+				str+="<li><img src='/display?fileName="+fileCallPath"'><li>";
 			}
 		});
 		uploadResult.append(str);
