@@ -3,15 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zerock</groupId>
-	<artifactId>controller</artifactId>
-	<name>ex05</name>
+	<artifactId>controllor</artifactId>
+	<name>ex03</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>5.0.7.RELEASE</org.springframework-version>
-		<org.aspectj-version>1.9.0</org.aspectj-version>
-		<org.slf4j-version>1.7.25</org.slf4j-version>
+		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -80,7 +80,7 @@
 					<artifactId>jmxri</artifactId>
 				</exclusion>
 			</exclusions>
-	
+			<!--  <scope>runtime</scope>  -->
 		</dependency>
 
 		<!-- @Inject -->
@@ -109,40 +109,25 @@
 			<version>1.2</version>
 		</dependency>
 	
-		<!-- 서블릿3.0이상 활용하기 위해 추가 -->
+		<!-- json 처리 -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
-		<dependency>
-		    <groupId>net.coobird</groupId>
-		    <artifactId>thumbnailator</artifactId>
-		    <version>0.4.8</version>
-		</dependency>
-		<!-- jackson databind 관련 라이브러리 -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.5</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.6</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.fasterxml.jackson.dataformat</groupId>
-		    <artifactId>jackson-dataformat-xml</artifactId>
-		    <version>2.9.5</version>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.9.6</version>
 		</dependency>
-			<!-- java인스턴스를 직접 JSON 타입의 문자열로 변환하는 경우 -->
+		<!-- java인스턴스를 직접 JSON 타입의 문자열로 변환하는 경우 -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.2</version>
 		</dependency>
 		
-		
-			<!-- lombok추가 설정 -->
+		<!-- lombok추가 설정 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -192,11 +177,33 @@
 			<version>1.16</version>
 		</dependency>
 		
+		<!-- spring security -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>5.0.6.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		    <version>5.0.6.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId>
+		    <version>5.0.6.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		    <version>5.0.6.RELEASE</version>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>        
 	</dependencies>
